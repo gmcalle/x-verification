@@ -1,0 +1,25 @@
+# .gitpod.yml
+
+image:
+  file: .gitpod.Dockerfile  
+
+tasks:
+  - name: Setup Node
+    command: |
+      cd contracts-eth && npm install
+      cd ../backend && npm install
+      cd ../frontend && npm install
+
+  - name: Setup Rust & Anchor
+    command: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      source $HOME/.cargo/env
+      cargo install --git https://github.com/coral-xyz/anchor --tag v0.28.0 anchor-cli
+
+ports:
+  - port: 3000   # Next.js
+    onOpen: open-preview
+  - port: 3001   # Express server
+    onOpen: open-preview
+  - port: 8899   # Local Solana validator port 
+    onOpen: ignore
